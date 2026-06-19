@@ -180,15 +180,17 @@ function buildSearchParams(params: SearchEventsParams) {
   const filters = [EVENTS_BASE_FILTER];
   if (typeof online === "boolean") filters.push(`online:${online}`);
 
-  // nextOccurrenceStartTimestamp is the attribute configured in Algolia's
-  // numericAttributesForFiltering. occurrenceStartTimestamps is not indexed
-  // for numeric filtering, so we use nextOccurrenceStartTimestamp here.
+  // Per handoff doc: use occurrenceStartTimestampMin for the "from" bound and
+  // occurrenceEndTimestampMax for the "to" bound — these are the numeric attributes
+  // configured in Algolia's numericAttributesForFiltering.
+  // occurrenceStartTimestampMin = Math.min of all occurrence starts (earliest start)
+  // occurrenceEndTimestampMax  = Math.max of all occurrence ends (latest end)
   const numericFilters: string[] = [];
   if (typeof dateFrom === "number") {
-    numericFilters.push(`nextOccurrenceStartTimestamp >= ${dateFrom}`);
+    numericFilters.push(`occurrenceStartTimestampMin >= ${dateFrom}`);
   }
   if (typeof dateTo === "number") {
-    numericFilters.push(`nextOccurrenceStartTimestamp <= ${dateTo}`);
+    numericFilters.push(`occurrenceEndTimestampMax <= ${dateTo}`);
   }
 
   const hasGeo = typeof lat === "number" && typeof lng === "number";
