@@ -1,6 +1,8 @@
 "use client";
 
 import { EventsUserLocationFilter } from "@components/events/EventsUserLocationFilter";
+import { CategoriesHierarchicalFilter } from "@components/events/CategoriesHierarchicalFilter";
+import { useUserLocation } from "@hooks/google-maps/use-user-location";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 import { ChevronDown } from "lucide-react";
@@ -10,11 +12,16 @@ import {
   quickRangeDates,
   type QuickRange,
 } from "@lib/date-range";
+import type { EventFacet } from "@lib/algolia/events";
 
-type Facet = { label: string; value: string; count: number };
+export type Facet = { label: string; value: string; count: number };
 
 type Props = {
-  categories: Facet[];
+  categoryLvl0: EventFacet[];
+  categoryLvl1: EventFacet[];
+  categoryLvl2: EventFacet[];
+  categoryLvl3: EventFacet[];
+  categoryLvl4: EventFacet[];
   organisationTypes: Facet[];
   hasGeo: boolean;
 };
@@ -58,12 +65,17 @@ function Section({
 }
 
 export function AdvancedFilters({
-  categories,
+  categoryLvl0,
+  categoryLvl1,
+  categoryLvl2,
+  categoryLvl3,
+  categoryLvl4,
   organisationTypes,
   hasGeo,
 }: Props) {
   const router = useRouter();
   const params = useSearchParams();
+  const { clearLocation } = useUserLocation();
 
   /** Apply a batch of param changes and navigate. null removes the key. */
   const apply = useCallback(
@@ -97,25 +109,23 @@ export function AdvancedFilters({
     Boolean(params.get("online"));
 
   return (
-    <aside
-      className="flex flex-col gap-5 rounded-xl border border-border bg-card p-5"
-      aria-label="Advanced filters"
-    >
+    <div className="flex flex-col gap-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-foreground">Advanced Filters</h2>
+        <h2 className="text-lg font-bold text-foreground">Filters</h2>
         {hasActiveFilters ? (
           <button
             type="button"
-            onClick={() =>
+            onClick={() => {
+              clearLocation();
               router.push(
                 `${NAMESPACE_PATH}/search${
                   params.get("q") ? `?q=${params.get("q")}` : ""
                 }`,
-              )
-            }
+              );
+            }}
             className="text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
-            Clear
+            Clear all
           </button>
         ) : null}
       </div>
@@ -177,47 +187,13 @@ export function AdvancedFilters({
         </div>
       </Section>
 
-      <Section title="Event Categories">
-        {categories.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No categories.</p>
-        ) : (
-          <div className="flex flex-col gap-1">
-            <button
-              type="button"
-              onClick={() => apply({ category: null })}
-              className={`rounded-md px-2 py-1.5 text-left text-sm transition-colors ${
-                !activeCategory
-                  ? "font-semibold text-primary"
-                  : "text-foreground hover:bg-muted"
-              }`}
-            >
-              All Categories
-            </button>
-            {categories.map((cat) => (
-              <button
-                key={cat.value}
-                type="button"
-                onClick={() =>
-                  apply({
-                    category: activeCategory === cat.value ? null : cat.value,
-                  })
-                }
-                aria-pressed={activeCategory === cat.value}
-                className={`flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-left text-sm transition-colors ${
-                  activeCategory === cat.value
-                    ? "font-semibold text-primary"
-                    : "text-foreground hover:bg-muted"
-                }`}
-              >
-                <span>{cat.label}</span>
-                <span className="tabular-nums text-muted-foreground">
-                  ({cat.count})
-                </span>
-              </button>
-            ))}
-          </div>
-        )}
-      </Section>
+      <CategoriesHierarchicalFilter
+        lvl0={categoryLvl0}
+        lvl1={categoryLvl1}
+        lvl2={categoryLvl2}
+        lvl3={categoryLvl3}
+        lvl4={categoryLvl4}
+      />
 
       <Section title="Organisation Type">
         <div className="flex flex-col gap-1">
@@ -278,7 +254,7 @@ export function AdvancedFilters({
           />
         </div>
       </div>
-    </aside>
+    </div>
   );
 }
 

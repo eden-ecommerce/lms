@@ -27,6 +27,11 @@ export type EventHit = {
   ageRange: string | null;
   parkingInstructions: string | null;
   nextOccurrenceStartTimestamp: number | null;
+  nextOccurrenceEndTimestamp: number | null;
+  occurrenceStartTimestamps: number[];
+  occurrenceEndTimestamps: number[];
+  externalUrl: string | null;
+  organisationId: string | null;
   organisationName: string | null;
   organisationSlug: string | null;
   organisationType: string | null;
@@ -86,6 +91,15 @@ function mapHit(raw: RawHit): EventHit {
     ageRange: str(raw.ageRange),
     parkingInstructions: str(raw.parkingInstructions),
     nextOccurrenceStartTimestamp: num(raw.nextOccurrenceStartTimestamp),
+    nextOccurrenceEndTimestamp: num(raw.nextOccurrenceEndTimestamp),
+    occurrenceStartTimestamps: Array.isArray(raw.occurrenceStartTimestamps)
+      ? (raw.occurrenceStartTimestamps as unknown[]).filter((v): v is number => typeof v === "number" && Number.isFinite(v))
+      : [],
+    occurrenceEndTimestamps: Array.isArray(raw.occurrenceEndTimestamps)
+      ? (raw.occurrenceEndTimestamps as unknown[]).filter((v): v is number => typeof v === "number" && Number.isFinite(v))
+      : [],
+    externalUrl: str(raw.externalUrl),
+    organisationId: str(raw.organisationId),
     organisationName: str(raw.organisationName),
     organisationSlug: str(raw.organisationSlug),
     organisationType: str(raw.organisationType),
@@ -135,6 +149,10 @@ export type EventFacet = { label: string; value: string; count: number };
 
 export type EventFacets = {
   categories: EventFacet[];
+  categoryLvl1: EventFacet[];
+  categoryLvl2: EventFacet[];
+  categoryLvl3: EventFacet[];
+  categoryLvl4: EventFacet[];
   organisationTypes: EventFacet[];
 };
 
@@ -147,7 +165,7 @@ export type SearchEventsResult = {
   facets: EventFacets;
 };
 
-const EMPTY_FACETS: EventFacets = { categories: [], organisationTypes: [] };
+const EMPTY_FACETS: EventFacets = { categories: [], categoryLvl1: [], categoryLvl2: [], categoryLvl3: [], categoryLvl4: [], organisationTypes: [] };
 
 const EMPTY_RESULT: SearchEventsResult = {
   hits: [],
@@ -193,6 +211,8 @@ function categoryFacetFilter(category: string): string[] {
     `categoryHierarchy.lvl0:${category}`,
     `categoryHierarchy.lvl1:${category}`,
     `categoryHierarchy.lvl2:${category}`,
+    `categoryHierarchy.lvl3:${category}`,
+    `categoryHierarchy.lvl4:${category}`,
   ];
 }
 
@@ -241,7 +261,14 @@ export async function searchEvents(
   const facetParams: Record<string, unknown> = {
     ...base,
     hitsPerPage: 0,
-    facets: ["categoryHierarchy.lvl0", "organisationType"],
+    facets: [
+      "categoryHierarchy.lvl0",
+      "categoryHierarchy.lvl1",
+      "categoryHierarchy.lvl2",
+      "categoryHierarchy.lvl3",
+      "categoryHierarchy.lvl4",
+      "organisationType",
+    ],
   };
 
   const response = await client.search([
@@ -303,6 +330,38 @@ function readFacets(result: unknown): EventFacets {
     }))
     .sort((a, b) => b.count - a.count);
 
+  const categoryLvl1 = Object.entries(facets["categoryHierarchy.lvl1"] ?? {})
+    .map(([value, count]) => ({
+      value,
+      label: cleanCategoryLabel(value.split(" > ").at(-1) ?? value) ?? value,
+      count,
+    }))
+    .sort((a, b) => b.count - a.count);
+
+  const categoryLvl2 = Object.entries(facets["categoryHierarchy.lvl2"] ?? {})
+    .map(([value, count]) => ({
+      value,
+      label: cleanCategoryLabel(value.split(" > ").at(-1) ?? value) ?? value,
+      count,
+    }))
+    .sort((a, b) => b.count - a.count);
+
+  const categoryLvl3 = Object.entries(facets["categoryHierarchy.lvl3"] ?? {})
+    .map(([value, count]) => ({
+      value,
+      label: cleanCategoryLabel(value.split(" > ").at(-1) ?? value) ?? value,
+      count,
+    }))
+    .sort((a, b) => b.count - a.count);
+
+  const categoryLvl4 = Object.entries(facets["categoryHierarchy.lvl4"] ?? {})
+    .map(([value, count]) => ({
+      value,
+      label: cleanCategoryLabel(value.split(" > ").at(-1) ?? value) ?? value,
+      count,
+    }))
+    .sort((a, b) => b.count - a.count);
+
   const organisationTypes = Object.entries(facets["organisationType"] ?? {})
     .map(([value, count]) => ({
       value,
@@ -311,7 +370,7 @@ function readFacets(result: unknown): EventFacets {
     }))
     .sort((a, b) => b.count - a.count);
 
-  return { categories, organisationTypes };
+  return { categories, categoryLvl1, categoryLvl2, categoryLvl3, categoryLvl4, organisationTypes };
 }
 
 /** Fetch a single event by its id. The Algolia objectID is `event:<id>`. */
