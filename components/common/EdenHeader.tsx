@@ -1,71 +1,133 @@
+"use client";
+
+import { FavouritesLink } from "@components/events/FavouritesLink";
 import { NsLink } from "@components/ns-link";
 import { NAMESPACE_PATH } from "@lib/config";
-import { ShoppingBag, User } from "lucide-react";
+import { ShoppingBag, HelpCircle, User, Phone } from "lucide-react";
 
-const PRIMARY_LINKS = [
+const NAV_LINKS = [
+  { text: "Christian Books", href: "https://www.eden.co.uk/books" },
   { text: "Bibles", href: "https://www.eden.co.uk/bibles" },
-  { text: "Books", href: "https://www.eden.co.uk/books" },
-  { text: "Music", href: "https://www.eden.co.uk/music-and-film" },
-  { text: "Gifts", href: "https://www.eden.co.uk/gifts" },
+  { text: "Children & Youth", href: "https://www.eden.co.uk/children" },
   { text: "Church Supplies", href: "https://www.eden.co.uk/church-supplies" },
-  { text: "Events", href: NAMESPACE_PATH, internal: true },
+  { text: "Home & Living", href: "https://www.eden.co.uk/home-and-living" },
+  { text: "Christian Gifts", href: "https://www.eden.co.uk/gifts" },
+  { text: "Cards", href: "https://www.eden.co.uk/cards" },
+  { text: "Top 50", href: "https://www.eden.co.uk/top-50" },
+  { text: "Christian Jobs", href: "https://www.eden.co.uk/jobs" },
+  { text: "Christian Events", href: NAMESPACE_PATH, internal: true },
 ];
 
-/** Eden.co.uk-style chrome: promo strip + brand row + green primary nav. */
+const USP_ITEMS = [
+  { text: "FREE delivery on orders over £15" },
+  { text: "Serving over 2 million Christians in the UK" },
+  { text: "Excellent 4.8 out of 5 on Trustpilot" },
+];
+
 export function EdenHeader() {
   return (
-    <header className="bg-background">
-      {/* Promo strip */}
-      <div className="bg-primary text-primary-foreground">
-        <div className="mx-auto flex max-w-6xl items-center justify-center px-4 py-1.5 text-center text-xs font-medium sm:text-sm">
-          Free UK delivery on orders over £25 — supporting churches and charities since 1989
+    <header className="bg-white">
+      {/* USP strip — dark green */}
+      <div className="bg-[#1a3d2b] text-white">
+        <div className="mx-auto flex max-w-7xl items-center justify-center divide-x divide-white/20 px-4">
+          {USP_ITEMS.map((item) => (
+            <p key={item.text} className="px-4 py-2 text-center text-[11px] font-medium sm:text-xs">
+              {item.text}
+            </p>
+          ))}
         </div>
       </div>
 
       {/* Brand row */}
-      <div className="border-b border-border">
-        <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-4">
-          <a
-            href="https://www.eden.co.uk"
-            className="shrink-0"
-            aria-label="Eden home"
-          >
+      <div className="border-b border-gray-200 bg-white">
+        <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:py-4">
+          {/* Logo */}
+          <a href="https://www.eden.co.uk" className="shrink-0" aria-label="Eden home">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/eden-logo.svg"
-              alt="Eden"
-              className="h-10 w-auto"
-            />
+            <img src="/eden-logo.svg" alt="Eden" className="h-12 w-auto sm:h-14" />
           </a>
 
-          <div className="ml-auto flex items-center gap-5">
+          {/* Search bar */}
+          <form
+            action="https://www.eden.co.uk/search"
+            method="get"
+            role="search"
+            className="mx-4 hidden flex-1 md:flex"
+          >
+            <div className="flex w-full overflow-hidden rounded-full border-2 border-primary bg-white">
+              <input
+                type="search"
+                name="q"
+                placeholder="Search Eden.co.uk"
+                className="flex-1 bg-transparent px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                aria-label="Search Eden.co.uk"
+              />
+              <button
+                type="submit"
+                className="shrink-0 bg-primary px-4 text-primary-foreground hover:bg-primary/90"
+                aria-label="Search"
+              >
+                <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </form>
+
+          {/* Phone + actions */}
+          <div className="ml-auto flex items-center gap-1 sm:gap-3">
+            <a
+              href="tel:03452223336"
+              className="hidden items-center gap-2 text-foreground lg:flex"
+              aria-label="Call us on 0345 222 3336"
+            >
+              <Phone className="h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+              <div className="text-left">
+                <p className="text-sm font-semibold leading-tight">0345 222 3336</p>
+                <p className="text-[11px] text-muted-foreground">Weekdays 8.30–17.30</p>
+              </div>
+            </a>
+
+            <div className="hidden h-8 w-px bg-border lg:block" aria-hidden="true" />
+
+            <FavouritesLink href={`${NAMESPACE_PATH}/favourites`} />
+
+            <a
+              href="https://www.eden.co.uk/help"
+              className="flex flex-col items-center gap-0.5 px-2 py-1 text-foreground hover:text-primary"
+            >
+              <HelpCircle className="h-5 w-5" aria-hidden="true" />
+              <span className="hidden text-[11px] font-medium sm:block">Help</span>
+            </a>
+
             <a
               href="https://www.eden.co.uk/account"
-              className="flex items-center gap-1.5 text-sm text-foreground hover:text-primary"
+              className="flex flex-col items-center gap-0.5 px-2 py-1 text-foreground hover:text-primary"
             >
-              <User className="h-5 w-5" />
-              <span className="hidden sm:inline">Account</span>
+              <User className="h-5 w-5" aria-hidden="true" />
+              <span className="hidden text-[11px] font-medium sm:block">Login</span>
             </a>
+
             <a
               href="https://www.eden.co.uk/shop/basket.php"
-              className="flex items-center gap-1.5 text-sm text-foreground hover:text-primary"
+              className="flex flex-col items-center gap-0.5 px-2 py-1 text-foreground hover:text-primary"
             >
-              <ShoppingBag className="h-5 w-5" />
-              <span className="hidden sm:inline">Basket</span>
+              <ShoppingBag className="h-5 w-5" aria-hidden="true" />
+              <span className="hidden text-[11px] font-medium sm:block">Basket</span>
             </a>
           </div>
         </div>
       </div>
 
       {/* Primary green nav */}
-      <nav className="bg-primary text-primary-foreground">
-        <div className="mx-auto flex max-w-6xl items-center gap-1 overflow-x-auto px-2 sm:px-4">
-          {PRIMARY_LINKS.map((link) =>
+      <nav className="bg-primary text-primary-foreground shadow-sm" aria-label="Main navigation">
+        <div className="mx-auto flex max-w-7xl items-center overflow-x-auto px-2 sm:px-4">
+          {NAV_LINKS.map((link) =>
             link.internal ? (
               <NsLink
                 key={link.text}
                 href={link.href}
-                className="whitespace-nowrap px-3 py-2.5 text-sm font-medium underline-offset-4 hover:underline"
+                className="shrink-0 whitespace-nowrap px-3 py-3 text-sm font-medium underline-offset-2 hover:underline"
               >
                 {link.text}
               </NsLink>
@@ -73,7 +135,7 @@ export function EdenHeader() {
               <a
                 key={link.text}
                 href={link.href}
-                className="whitespace-nowrap px-3 py-2.5 text-sm font-medium underline-offset-4 hover:underline"
+                className="shrink-0 whitespace-nowrap px-3 py-3 text-sm font-medium underline-offset-2 hover:underline"
               >
                 {link.text}
               </a>
