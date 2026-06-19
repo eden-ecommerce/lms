@@ -1,4 +1,5 @@
 import type { CloudflareLocation } from "@lib/location/types";
+import Image from "next/image";
 
 const FOOTER_COLUMNS = [
   {
@@ -63,8 +64,14 @@ export function Footer({ geo }: FooterProps) {
           {/* Logo + tagline */}
           <div className="col-span-2 md:col-span-1">
             <a href="https://www.eden.co.uk" aria-label="Eden home">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/eden-logo.svg" alt="Eden" className="h-12 w-auto" />
+              <Image
+                src="/eden-logo.svg"
+                alt="Eden"
+                width={120}
+                height={87}
+                className="h-12 w-auto"
+                unoptimized
+              />
             </a>
             <p className="mt-3 max-w-[180px] text-xs leading-relaxed text-muted-foreground">
               The UK&apos;s favourite Christian bookshop — Bibles, books, gifts and Christian events.

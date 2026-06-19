@@ -1,9 +1,9 @@
 "use client";
 
-import { FavouritesLink } from "@components/events/FavouritesLink";
 import { HeaderSearch } from "@components/common/HeaderSearch";
 import { NsLink } from "@components/ns-link";
 import { NAMESPACE_PATH } from "@lib/config";
+import Image from "next/image";
 import { ShoppingBag, HelpCircle, User, Phone } from "lucide-react";
 
 const NAV_LINKS = [
@@ -44,8 +44,15 @@ export function EdenHeader() {
         <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:py-4">
           {/* Logo */}
           <a href="https://www.eden.co.uk" className="shrink-0" aria-label="Eden home">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/eden-logo.svg" alt="Eden" className="h-12 w-auto sm:h-14" />
+            <Image
+              src="/eden-logo.svg"
+              alt="Eden"
+              width={120}
+              height={87}
+              className="h-12 w-auto sm:h-14"
+              unoptimized
+              priority
+            />
           </a>
 
           {/* Live instant search */}
@@ -66,8 +73,6 @@ export function EdenHeader() {
             </a>
 
             <div className="hidden h-8 w-px bg-border lg:block" aria-hidden="true" />
-
-            <FavouritesLink href={`${NAMESPACE_PATH}/favourites`} />
 
             <a
               href="https://www.eden.co.uk/help"
