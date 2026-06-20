@@ -13,6 +13,12 @@
 export const ASSET_DEV_ORIGIN = "http://localhost:3000";
 export const API_DEV_ORIGIN = "http://localhost:3000";
 
+// Hardcoded fallback: this project's stable production *.vercel.app alias. Used
+// when no NEXT_PUBLIC_ASSET_ORIGIN override and no Vercel-injected URL is present
+// (e.g. an exported build), so production never accidentally points assets back
+// at the eden.co.uk/lms Cloudflare path. Override per-clone via the env var.
+export const ASSET_PRODUCTION_ORIGIN = "https://lms-eight-tau.vercel.app";
+
 // Origin resolution — WHY assets must NOT load from eden.co.uk/lms:
 //
 // The app is served to visitors at https://www.eden.co.uk/lms, but that path is
@@ -34,6 +40,7 @@ export const API_DEV_ORIGIN = "http://localhost:3000";
 //      Used in production when the override is absent.
 //   3. VERCEL_URL — auto-injected per-deployment URL. Used in preview so the v0
 //      preview iframe and Vercel preview deploys load their own assets.
+//   4. ASSET_PRODUCTION_ORIGIN — hardcoded stable alias as the final safety net.
 //
 // Development: same-origin localhost (assetPrefix left undefined in next.config).
 const explicitAssetOrigin = process.env.NEXT_PUBLIC_ASSET_ORIGIN?.replace(
@@ -54,8 +61,11 @@ const vercelDeploymentUrl = process.env.VERCEL_URL
 // explicit override if one is scoped to preview).
 const resolvedOrigin =
   process.env.VERCEL_ENV === "production"
-    ? (explicitAssetOrigin ?? vercelProductionUrl ?? vercelDeploymentUrl)
-    : (explicitAssetOrigin ?? vercelDeploymentUrl);
+    ? (explicitAssetOrigin ??
+      vercelProductionUrl ??
+      vercelDeploymentUrl ??
+      ASSET_PRODUCTION_ORIGIN)
+    : (explicitAssetOrigin ?? vercelDeploymentUrl ?? ASSET_PRODUCTION_ORIGIN);
 
 export const ASSET_BASE_URL =
   process.env.NODE_ENV === "production"
