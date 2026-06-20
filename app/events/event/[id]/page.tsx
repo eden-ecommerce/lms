@@ -28,11 +28,10 @@ import {
   jsonLdScriptProps,
 } from "@lib/seo/jsonld";
 
-// Statically render event detail pages at build time.
-// The Cloudflare geo-location call has been removed from the root layout so
-// this page (and the layout) can be fully static.
-export const dynamic = "force-static";
-export const revalidate = 3600; // re-generate at most once per hour
+// ISR: cache event detail pages, re-validate at most once per hour.
+// force-static is not used here because we don't enumerate all event IDs at
+// build time — pages are rendered on first request then served from cache.
+export const revalidate = 3600;
 
 type Props = { params: Promise<{ id: string }> };
 

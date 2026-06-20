@@ -3,14 +3,17 @@
 import { EventCard } from "@components/events/EventCard";
 import { NsLink } from "@components/ns-link";
 import { useFavourites } from "@lib/favourites/use-favourites";
-import { NAMESPACE_PATH } from "@lib/config";
+import { NAMESPACE_PATH, apiUrl } from "@lib/config";
 import type { EventHit } from "@lib/algolia/events";
 import { Heart, Loader2 } from "lucide-react";
 import useSWR from "swr";
 
 async function fetchFavourites(ids: string[]): Promise<EventHit[]> {
   if (ids.length === 0) return [];
-  const res = await fetch("/api/favourites", {
+  // apiUrl() resolves to the correct origin+basePath in all environments:
+  // dev → http://localhost:3000/api/favourites
+  // production proxy → https://www.eden.co.uk/events/api/favourites
+  const res = await fetch(apiUrl("/events/api/favourites"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ ids }),
