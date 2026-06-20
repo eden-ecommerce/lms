@@ -1,3 +1,6 @@
+import { NsLink } from "@components/ns-link";
+import { buttonVariants } from "@components/ui/button";
+import { cn } from "@lib/utils";
 import { Hero } from "@components/event-manager/Hero";
 import { AudienceCards } from "@components/event-manager/AudienceCards";
 import { FeatureBlock } from "@components/event-manager/FeatureBlock";
@@ -163,13 +166,38 @@ export default function EventManagerHome() {
         </div>
       </section>
 
+      {/* Cross-link to Ticketing */}
+      <section className="border-y border-border bg-accent/30 py-14 sm:py-20">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-widest text-primary">
+                Also from Christian360
+              </span>
+              <h2 className="mt-2 text-balance font-serif text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+                Need to sell tickets too?
+              </h2>
+              <p className="mt-3 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground">
+                Christian360 Ticketing runs alongside the Event Manager — gate programme sessions behind the right ticket, let attendees buy and show tickets inside your branded app, and manage everything from a single admin panel.
+              </p>
+            </div>
+            <NsLink
+              href="/events/ticketing"
+              className={cn(buttonVariants({ variant: "outline", size: "lg" }), "shrink-0")}
+            >
+              Explore Ticketing
+            </NsLink>
+          </div>
+        </div>
+      </section>
+
       {/* Testimonial */}
       <section className="bg-card py-16 sm:py-20">
         <div className="mx-auto max-w-3xl px-4">
           <Testimonial
-            quote="The day-planner and push notifications transformed how delegates experience our convention. Everything our team needs to run a 10,000-person event now lives in one place."
-            author="Event Director"
-            role="Keswick Convention"
+            quote="The reaction from delegates has been brilliant. People keep telling us the app made a vast, three-week convention feel personal and easy to navigate — and the live updates took real pressure off the team on the ground."
+            author="The Eden Events team"
+            role="reflecting on Keswick Convention"
           />
         </div>
       </section>

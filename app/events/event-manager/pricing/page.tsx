@@ -3,6 +3,8 @@ import { SectionHeading } from "@components/event-manager/SectionHeading";
 import { LogoStrip } from "@components/event-manager/LogoStrip";
 import { CtaSection } from "@components/event-manager/CtaSection";
 import { EM_PATH } from "@components/event-manager/em-config";
+import { NsLink } from "@components/ns-link";
+import { Ticket } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -53,6 +55,27 @@ export default function PricingPage() {
         <p className="mt-8 text-center text-sm text-muted-foreground">
           All prices exclude VAT. Annual billing available with two months free.
         </p>
+      </section>
+
+      {/* Ticketing cross-link */}
+      <section className="mx-auto max-w-7xl px-4 pb-4">
+        <div className="flex items-start gap-4 rounded-2xl border border-primary/20 bg-primary/5 p-5">
+          <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <Ticket className="size-4" />
+          </span>
+          <div>
+            <p className="text-sm font-semibold text-foreground">
+              Ticketing is priced separately.
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+              Christian360 Ticketing has its own simple fee-free plans starting at £19/month.{" "}
+              <NsLink href="/events/ticketing/pricing" className="font-semibold text-primary underline underline-offset-2">
+                View Ticketing pricing
+              </NsLink>
+              {" "}— or add it to your Event Manager plan at any time.
+            </p>
+          </div>
+        </div>
       </section>
 
       <section className="border-y border-border bg-card py-12">

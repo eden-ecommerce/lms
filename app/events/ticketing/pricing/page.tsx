@@ -4,8 +4,9 @@ import { PageHeader } from "@components/ticketing/PageHeader";
 import { TicketPricing } from "@components/ticketing/TicketPricing";
 import { FaqList, type FaqItem } from "@components/ticketing/FaqList";
 import { TicketCtaSection } from "@components/ticketing/TicketCtaSection";
-import { tkHref } from "@components/ticketing/tk-config";
-import { BadgePoundSterling, ShieldCheck, Banknote } from "lucide-react";
+import { tkHref, EVENT_MANAGER_HREF } from "@components/ticketing/tk-config";
+import { NsLink } from "@components/ns-link";
+import { BadgePoundSterling, ShieldCheck, Banknote, CalendarClock } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Pricing",
@@ -86,6 +87,27 @@ export default function PricingPage() {
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{body}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Event Manager cross-link */}
+      <section className="mx-auto max-w-7xl px-4 pb-4 pt-4">
+        <div className="flex items-start gap-4 rounded-2xl border border-primary/20 bg-primary/5 p-5">
+          <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <CalendarClock className="size-4" />
+          </span>
+          <div>
+            <p className="text-sm font-semibold text-foreground">
+              Want a mobile app and programme manager too?
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+              Christian360 Ticketing works seamlessly alongside the Event Manager — day-planner, live translation, push notifications, click-and-collect and more.{" "}
+              <NsLink href={EVENT_MANAGER_HREF} className="font-semibold text-primary underline underline-offset-2">
+                Explore the Event Manager
+              </NsLink>
+              .
+            </p>
           </div>
         </div>
       </section>
