@@ -558,7 +558,9 @@ export async function getOrganisationById(
       indexName: organisationHubIndex,
       query: "",
       params: {
-        filters: `entityType:organisation AND id:${organisationId}`,
+        // UUID values containing hyphens must be quoted in Algolia filters —
+        // an unquoted UUID is parsed as arithmetic and matches nothing.
+        filters: `entityType:organisation AND id:"${organisationId}"`,
         hitsPerPage: 1,
       },
     },
