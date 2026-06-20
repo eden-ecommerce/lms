@@ -493,6 +493,13 @@ export async function getCategoryFacets(): Promise<CategoryFacetsResult> {
 // Organisation
 // ---------------------------------------------------------------------------
 
+export type OrgCategory = {
+  id: number;
+  slug: string;
+  name: string;
+  parentId: number | null;
+};
+
 export type OrganisationHit = {
   objectID: string;
   id: string;
@@ -505,6 +512,8 @@ export type OrganisationHit = {
   yearFounded: number | null;
   logoUrl: string | null;
   bannerUrl: string | null;
+  tags: string[];
+  categories: OrgCategory[];
 };
 
 /** Parse a field that may be a JSON string or already a plain object. */
@@ -528,6 +537,31 @@ function parseJsonField(value: unknown): Record<string, unknown> {
 function mapOrgHit(raw: RawHit): OrganisationHit {
   const logo = parseJsonField(raw.logo);
   const banner = parseJsonField(raw.banner);
+
+  // _tags is a plain string array in Algolia
+  const tags: string[] = Array.isArray(raw._tags)
+    ? (raw._tags as unknown[]).filter((t): t is string => typeof t === "string")
+    : [];
+
+  // categories is an array of objects: { id, slug, name, parentId }
+  const categories: OrgCategory[] = Array.isArray(raw.categories)
+    ? (raw.categories as unknown[]).reduce<OrgCategory[]>((acc, c) => {
+        if (c && typeof c === "object") {
+          const cat = c as Record<string, unknown>;
+          if (typeof cat.name === "string") {
+            acc.push({
+              id: typeof cat.id === "number" ? cat.id : 0,
+              slug: typeof cat.slug === "string" ? cat.slug : "",
+              name: cat.name,
+              parentId:
+                typeof cat.parentId === "number" ? cat.parentId : null,
+            });
+          }
+        }
+        return acc;
+      }, [])
+    : [];
+
   return {
     objectID: String(raw.objectID ?? ""),
     id: String(raw.id ?? ""),
@@ -540,6 +574,8 @@ function mapOrgHit(raw: RawHit): OrganisationHit {
     yearFounded: typeof raw.yearFounded === "number" ? raw.yearFounded : null,
     logoUrl: str(logo.url),
     bannerUrl: str(banner.url),
+    tags,
+    categories,
   };
 }
 
