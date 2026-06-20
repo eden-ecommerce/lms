@@ -104,8 +104,8 @@ export function Footer() {
       {/* Copyright bar */}
       <div className="border-t border-gray-200 bg-[#1a3d2b] px-4 py-4 text-center">
         <p className="text-xs text-white/70">
-          &copy; {new Date().getFullYear()} Eden.co.uk. Event data provided for
-          information only. Always confirm details with the event organiser.
+          &copy; {new Date().getFullYear()} Eden.co.uk. Christian360 LMS is part
+          of the Christian360 platform.
         </p>
       </div>
     </footer>
