@@ -5,7 +5,12 @@ import { SectionHeading } from "@components/event-manager/SectionHeading";
 import { Testimonial } from "@components/event-manager/Testimonial";
 import { LogoStrip } from "@components/event-manager/LogoStrip";
 import { CtaSection } from "@components/event-manager/CtaSection";
-import { emAsset, EM_PATH } from "@components/event-manager/em-config";
+import {
+  DayPlannerScreen,
+  LiveTranslationScreen,
+  ClickCollectScreen,
+} from "@components/event-manager/screens";
+import { EM_PATH } from "@components/event-manager/em-config";
 import type { Metadata } from "next";
 import { Users, MapPinned, Bell, ShoppingBasket, Ticket, BarChart3 } from "lucide-react";
 
@@ -32,8 +37,8 @@ export default function ConferencesPage() {
         eyebrow="Conferences & Festivals"
         headline="Run your biggest event from a single app"
         subheadline="Multi-stage programmes, live translation and click-and-collect catering for thousands of delegates — all in one beautifully branded mobile experience."
-        mockup={{ src: emAsset("/day-planner.png"), alt: "Conference day planner with multi-stage filtering" }}
-        secondaryMockup={{ src: emAsset("/live-translation.png"), alt: "Live translation audio interface" }}
+        screen={<DayPlannerScreen />}
+        secondaryScreen={<LiveTranslationScreen />}
       />
 
       <section className="border-b border-border bg-card py-12">
@@ -53,7 +58,7 @@ export default function ConferencesPage() {
               "Personal saved schedules with reminders",
               "Real-time programme updates pushed to all devices",
             ]}
-            mockup={{ src: emAsset("/day-planner.png"), alt: "Day planner with stage filtering" }}
+            screen={<DayPlannerScreen />}
           />
           <FeatureBlock
             reverse
@@ -65,7 +70,7 @@ export default function ConferencesPage() {
               "Listeners use their own headphones",
               "No receivers or extra hardware to manage",
             ]}
-            mockup={{ src: emAsset("/live-translation.png"), alt: "Live translation interface" }}
+            screen={<LiveTranslationScreen />}
           />
           <FeatureBlock
             eyebrow="Click & Collect"
@@ -76,7 +81,7 @@ export default function ConferencesPage() {
               "Timed collection slots reduce crowding",
               "Live dashboards for caterers and stalls",
             ]}
-            mockup={{ src: emAsset("/click-collect.png"), alt: "Click and collect ordering" }}
+            screen={<ClickCollectScreen />}
           />
         </div>
       </section>

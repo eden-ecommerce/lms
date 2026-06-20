@@ -1,25 +1,24 @@
+import type { ReactNode } from "react";
 import { NsLink } from "@components/ns-link";
 import { buttonVariants } from "@components/ui/button";
 import { cn } from "@lib/utils";
 import { PhoneMockup } from "./PhoneMockup";
 import { DEMO_HREF, emHref } from "./em-config";
 
-type Img = { src: string; alt: string };
-
 type HeroProps = {
   eyebrow: string;
   headline: string;
   subheadline: string;
-  mockup: Img;
-  secondaryMockup?: Img;
+  screen: ReactNode;
+  secondaryScreen?: ReactNode;
 };
 
 export function Hero({
   eyebrow,
   headline,
   subheadline,
-  mockup,
-  secondaryMockup,
+  screen,
+  secondaryScreen,
 }: HeroProps) {
   return (
     <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-accent/40 to-background">
@@ -48,13 +47,11 @@ export function Hero({
         </div>
 
         <div className="relative flex items-center justify-center">
-          <PhoneMockup src={mockup.src} alt={mockup.alt} className="z-10" />
-          {secondaryMockup ? (
-            <PhoneMockup
-              src={secondaryMockup.src}
-              alt={secondaryMockup.alt}
-              className="-ml-10 mt-16 hidden max-w-[210px] opacity-95 sm:block"
-            />
+          <PhoneMockup className="z-10">{screen}</PhoneMockup>
+          {secondaryScreen ? (
+            <PhoneMockup className="-ml-10 mt-16 hidden max-w-[210px] opacity-95 sm:block">
+              {secondaryScreen}
+            </PhoneMockup>
           ) : null}
         </div>
       </div>

@@ -1,14 +1,18 @@
-import { SectionHeading } from "@components/event-manager/SectionHeading";
+import type { ReactNode } from "react";
 import { PhoneMockup } from "@components/event-manager/PhoneMockup";
 import { CtaSection } from "@components/event-manager/CtaSection";
-import { emAsset, EM_PATH } from "@components/event-manager/em-config";
+import {
+  DayPlannerScreen,
+  ArrivalFilterScreen,
+} from "@components/event-manager/screens";
+import { EM_PATH } from "@components/event-manager/em-config";
 import { cn } from "@lib/utils";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Case Studies",
   description:
-    "See how Keswick Convention, a multi-site Christian festival and Spring Harvest Holidays use Christian360 Events to run their gatherings.",
+    "See how Keswick Convention and Spring Harvest Holidays use Christian360 Events to run their gatherings.",
   alternates: { canonical: `https://www.eden.co.uk${EM_PATH}/case-studies` },
 };
 
@@ -21,7 +25,7 @@ type CaseStudy = {
   quote: string;
   author: string;
   stats: { value: string; label: string }[];
-  mockup: { src: string; alt: string };
+  screen: ReactNode;
 };
 
 const CASE_STUDIES: CaseStudy[] = [
@@ -41,25 +45,7 @@ const CASE_STUDIES: CaseStudy[] = [
       { value: "3 weeks", label: "Continuous programme" },
       { value: "8 langs", label: "Live translation" },
     ],
-    mockup: { src: emAsset("/day-planner.png"), alt: "Keswick Convention day planner" },
-  },
-  {
-    org: "Multi-Site Christian Festival",
-    category: "Festival",
-    headline: "Click & collect that cut catering queues in half",
-    challenge:
-      "Long queues at food stalls were eating into session time and frustrating festival-goers across several sites running in parallel.",
-    solution:
-      "Click & collect let attendees order ahead and collect at timed slots, while organisers managed every site's programme and comms from a single dashboard.",
-    quote:
-      "Coordinating a multi-site festival used to mean a dozen spreadsheets. Now our whole programme, catering and comms run through one app the delegates love.",
-    author: "Festival Operations Lead",
-    stats: [
-      { value: "5 sites", label: "Run in parallel" },
-      { value: "50%", label: "Shorter food queues" },
-      { value: "1 app", label: "For the whole festival" },
-    ],
-    mockup: { src: emAsset("/click-collect.png"), alt: "Festival click and collect ordering" },
+    screen: <DayPlannerScreen />,
   },
   {
     org: "Spring Harvest Holidays",
@@ -77,7 +63,7 @@ const CASE_STUDIES: CaseStudy[] = [
       { value: "100%", label: "Stays personalised" },
       { value: "Faster", label: "Issue resolution" },
     ],
-    mockup: { src: emAsset("/arrival-filter.png"), alt: "Spring Harvest Holidays arrival planner" },
+    screen: <ArrivalFilterScreen />,
   },
 ];
 
@@ -104,7 +90,7 @@ export default function CaseStudiesPage() {
           return (
             <article key={study.org} className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
               <div className={cn("flex justify-center", reverse ? "lg:order-2" : "lg:order-1")}>
-                <PhoneMockup src={study.mockup.src} alt={study.mockup.alt} />
+                <PhoneMockup>{study.screen}</PhoneMockup>
               </div>
 
               <div className={cn(reverse ? "lg:order-1" : "lg:order-2")}>

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Check } from "lucide-react";
 import { cn } from "@lib/utils";
 import { PhoneMockup } from "./PhoneMockup";
@@ -8,7 +9,7 @@ type FeatureBlockProps = {
   title: string;
   description: string;
   bullets: string[];
-  mockup: { src: string; alt: string };
+  screen: ReactNode;
 };
 
 export function FeatureBlock({
@@ -17,12 +18,12 @@ export function FeatureBlock({
   title,
   description,
   bullets,
-  mockup,
+  screen,
 }: FeatureBlockProps) {
   return (
     <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
       <div className={cn("flex justify-center", reverse ? "lg:order-2" : "lg:order-1")}>
-        <PhoneMockup src={mockup.src} alt={mockup.alt} />
+        <PhoneMockup>{screen}</PhoneMockup>
       </div>
 
       <div className={cn(reverse ? "lg:order-1" : "lg:order-2")}>

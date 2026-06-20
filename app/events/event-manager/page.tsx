@@ -6,7 +6,13 @@ import { SectionHeading } from "@components/event-manager/SectionHeading";
 import { Testimonial } from "@components/event-manager/Testimonial";
 import { LogoStrip } from "@components/event-manager/LogoStrip";
 import { CtaSection } from "@components/event-manager/CtaSection";
-import { emAsset, EM_PATH } from "@components/event-manager/em-config";
+import {
+  DayPlannerScreen,
+  LiveTranslationScreen,
+  LockNotificationScreen,
+  ClickCollectScreen,
+} from "@components/event-manager/screens";
+import { EM_PATH } from "@components/event-manager/em-config";
 import type { Metadata } from "next";
 import {
   CalendarClock,
@@ -77,14 +83,14 @@ export default function EventManagerHome() {
         eyebrow="Christian360 Events"
         headline="Event management & a mobile app, built for the Church"
         subheadline="One flexible platform to run conferences, weekly church life and year-round retreats — with a beautiful branded app your community will actually use."
-        mockup={{ src: emAsset("/day-planner.png"), alt: "Day planner programme view in the Christian360 Events app" }}
-        secondaryMockup={{ src: emAsset("/lock-notification.png"), alt: "Push notification on a phone lock screen" }}
+        screen={<DayPlannerScreen />}
+        secondaryScreen={<LockNotificationScreen />}
       />
 
       {/* Social proof */}
       <section className="border-b border-border bg-card py-12">
         <div className="mx-auto max-w-7xl px-4">
-          <LogoStrip heading="Trusted by leading Christian events & organisations" />
+          <LogoStrip heading="Trusted by leading Christian events" />
         </div>
       </section>
 
@@ -117,7 +123,7 @@ export default function EventManagerHome() {
               "Smart filtering by track, stage and audience",
               "Personal saved agendas and reminders",
             ]}
-            mockup={{ src: emAsset("/day-planner.png"), alt: "Day planner programme view with filtering" }}
+            screen={<DayPlannerScreen />}
           />
           <FeatureBlock
             reverse
@@ -129,7 +135,7 @@ export default function EventManagerHome() {
               "Dozens of languages, no extra hardware",
               "Crystal-clear streaming across venues",
             ]}
-            mockup={{ src: emAsset("/live-translation.png"), alt: "Live translation audio interface" }}
+            screen={<LiveTranslationScreen />}
           />
           <FeatureBlock
             eyebrow="Click & Collect"
@@ -140,7 +146,7 @@ export default function EventManagerHome() {
               "Timed collection slots",
               "Live kitchen and stock dashboard",
             ]}
-            mockup={{ src: emAsset("/click-collect.png"), alt: "Click and collect ordering interface" }}
+            screen={<ClickCollectScreen />}
           />
         </div>
       </section>

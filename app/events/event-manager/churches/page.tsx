@@ -4,7 +4,11 @@ import { FeatureGrid, type FeatureItem } from "@components/event-manager/Feature
 import { SectionHeading } from "@components/event-manager/SectionHeading";
 import { Testimonial } from "@components/event-manager/Testimonial";
 import { CtaSection } from "@components/event-manager/CtaSection";
-import { emAsset, EM_PATH } from "@components/event-manager/em-config";
+import {
+  TalksArchiveScreen,
+  LockNotificationScreen,
+} from "@components/event-manager/screens";
+import { EM_PATH } from "@components/event-manager/em-config";
 import type { Metadata } from "next";
 import { Library, CalendarHeart, Bell, Users2, HandCoins, Megaphone } from "lucide-react";
 
@@ -31,8 +35,8 @@ export default function ChurchesPage() {
         eyebrow="Churches"
         headline="Church life, gathered in one friendly app"
         subheadline="Affordable, easy-to-run tools for busy administrators — a searchable talks archive, weekly planner and push notifications that keep your whole church connected."
-        mockup={{ src: emAsset("/talks-archive.png"), alt: "Searchable talks archive in the church app" }}
-        secondaryMockup={{ src: emAsset("/lock-notification.png"), alt: "Church push notification on a lock screen" }}
+        screen={<TalksArchiveScreen />}
+        secondaryScreen={<LockNotificationScreen />}
       />
 
       <section className="border-b border-border py-16 sm:py-24">
@@ -46,7 +50,7 @@ export default function ChurchesPage() {
               "Resume listening where you left off",
               "Simple CMS — no developer needed to publish",
             ]}
-            mockup={{ src: emAsset("/talks-archive.png"), alt: "Talks archive library view" }}
+            screen={<TalksArchiveScreen />}
           />
           <FeatureBlock
             reverse
@@ -58,7 +62,7 @@ export default function ChurchesPage() {
               "Schedule reminders for services and events",
               "Gentle nudges for prayer and giving",
             ]}
-            mockup={{ src: emAsset("/lock-notification.png"), alt: "Push notification on a lock screen" }}
+            screen={<LockNotificationScreen />}
           />
         </div>
       </section>

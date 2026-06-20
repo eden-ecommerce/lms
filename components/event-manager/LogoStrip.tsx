@@ -1,11 +1,4 @@
-const LOGOS = [
-  "Keswick Convention",
-  "Spring Harvest",
-  "New Wine",
-  "Greenbelt",
-  "CRE",
-  "Big Church Festival",
-];
+const LOGOS = ["Keswick Convention", "Spring Harvest Holidays"];
 
 export function LogoStrip({ heading }: { heading: string }) {
   return (

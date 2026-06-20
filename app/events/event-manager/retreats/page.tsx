@@ -4,7 +4,11 @@ import { FeatureGrid, type FeatureItem } from "@components/event-manager/Feature
 import { SectionHeading } from "@components/event-manager/SectionHeading";
 import { Testimonial } from "@components/event-manager/Testimonial";
 import { CtaSection } from "@components/event-manager/CtaSection";
-import { emAsset, EM_PATH } from "@components/event-manager/em-config";
+import {
+  ArrivalFilterScreen,
+  MaintenanceRequestScreen,
+} from "@components/event-manager/screens";
+import { EM_PATH } from "@components/event-manager/em-config";
 import type { Metadata } from "next";
 import { CalendarRange, Wrench, MapPin, Bell, UtensilsCrossed, Repeat } from "lucide-react";
 
@@ -31,8 +35,8 @@ export default function RetreatsPage() {
         eyebrow="Retreats & Holiday Parks"
         headline="A personal welcome for every guest, all year round"
         subheadline="Built for continuous, year-round sites — arrival-date filtering, on-site maintenance requests and personalised daily planners that make every stay feel tailor-made."
-        mockup={{ src: emAsset("/arrival-filter.png"), alt: "Arrival-date filtered daily planner" }}
-        secondaryMockup={{ src: emAsset("/maintenance-request.png"), alt: "Guest maintenance request form" }}
+        screen={<ArrivalFilterScreen />}
+        secondaryScreen={<MaintenanceRequestScreen />}
       />
 
       <section className="border-b border-border py-16 sm:py-24">
@@ -46,7 +50,7 @@ export default function RetreatsPage() {
               "Past and future days clearly handled",
               "Perfect for rolling, overlapping guest groups",
             ]}
-            mockup={{ src: emAsset("/arrival-filter.png"), alt: "Arrival-date filtering view" }}
+            screen={<ArrivalFilterScreen />}
           />
           <FeatureBlock
             reverse
@@ -58,7 +62,7 @@ export default function RetreatsPage() {
               "Live status updates for the guest",
               "Routed straight to your maintenance team",
             ]}
-            mockup={{ src: emAsset("/maintenance-request.png"), alt: "Maintenance request form" }}
+            screen={<MaintenanceRequestScreen />}
           />
         </div>
       </section>
