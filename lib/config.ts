@@ -11,7 +11,8 @@
  *   1. Rename the `app/REPLACE` folder to your real namespace
  *      (e.g. `app/churches`).
  *   2. Update `NAMESPACE` below to match.
- *   3. Set `ASSET_PRODUCTION_ORIGIN` and `API_PRODUCTION_ORIGIN` in `lib/constants.ts`.
+ *   3. Set `NEXT_PUBLIC_ASSET_ORIGIN` (the stable *.vercel.app alias) in the
+ *      Vercel project env, or update `ASSET_PRODUCTION_ORIGIN` in `lib/constants.ts`.
  *
  * Anything marked `REPLACE` in this file is intentional and must be addressed
  * before the project is considered ready.
