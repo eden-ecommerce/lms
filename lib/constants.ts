@@ -23,13 +23,24 @@ export const API_DEV_ORIGIN = "http://localhost:3000";
 // unstyled. Assets MUST be fetched straight from the Vercel deployment, which
 // serves `/_next/static/*` and images directly (with the right CORS headers).
 //
-// Vercel injects these automatically — no hardcoding, stable across deploys:
-//   • VERCEL_PROJECT_PRODUCTION_URL — the stable production *.vercel.app alias
-//     (same for every production deploy). Used in production.
-//   • VERCEL_URL — the per-deployment *.vercel.app URL. Used in preview so the
-//     v0 preview iframe and Vercel preview deploys load their own assets.
+// Resolution order (assetPrefix is evaluated at BUILD time, so a NEXT_PUBLIC_*
+// var is inlined into the bundle — it is not needed at runtime):
+//
+//   1. NEXT_PUBLIC_ASSET_ORIGIN — explicit, portable override. Set this per
+//      project in Vercel → Settings → Environment Variables to pin the stable
+//      *.vercel.app alias (e.g. https://lms-eden.vercel.app). Recommended for a
+//      reusable template: each clone sets its own value without editing source.
+//   2. VERCEL_PROJECT_PRODUCTION_URL — auto-injected stable production alias.
+//      Used in production when the override is absent.
+//   3. VERCEL_URL — auto-injected per-deployment URL. Used in preview so the v0
+//      preview iframe and Vercel preview deploys load their own assets.
 //
 // Development: same-origin localhost (assetPrefix left undefined in next.config).
+const explicitAssetOrigin = process.env.NEXT_PUBLIC_ASSET_ORIGIN?.replace(
+  /\/+$/,
+  "",
+);
+
 const vercelProductionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
   : undefined;
@@ -38,19 +49,20 @@ const vercelDeploymentUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : undefined;
 
-// In production, prefer the stable production alias; fall back to the
-// per-deployment URL. In preview, use the per-deployment URL.
-const vercelOrigin =
+// In production prefer an explicit override, then the stable production alias,
+// then the per-deployment URL. In preview, use the per-deployment URL (or an
+// explicit override if one is scoped to preview).
+const resolvedOrigin =
   process.env.VERCEL_ENV === "production"
-    ? (vercelProductionUrl ?? vercelDeploymentUrl)
-    : vercelDeploymentUrl;
+    ? (explicitAssetOrigin ?? vercelProductionUrl ?? vercelDeploymentUrl)
+    : (explicitAssetOrigin ?? vercelDeploymentUrl);
 
 export const ASSET_BASE_URL =
   process.env.NODE_ENV === "production"
-    ? (vercelOrigin ?? ASSET_DEV_ORIGIN)
+    ? (resolvedOrigin ?? ASSET_DEV_ORIGIN)
     : ASSET_DEV_ORIGIN;
 
 export const API_BASE_URL =
   process.env.NODE_ENV === "production"
-    ? (vercelOrigin ?? API_DEV_ORIGIN)
+    ? (resolvedOrigin ?? API_DEV_ORIGIN)
     : API_DEV_ORIGIN;
